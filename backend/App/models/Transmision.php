@@ -239,6 +239,21 @@ sql;
     return $mysqli->update($query, $parametros);
   }
 
+  public static function updateDataUserCalificacionFinal($user)
+  {
+    $mysqli = Database::getInstance(true);
+    $query = <<<sql
+    UPDATE registrados SET evaluacion_final = :evaluacion_final, calificacion_final = :calificacion_final WHERE id_registrado = :id_registrado
+sql;
+    $parametros = array(
+      ':evaluacion_final' => $user->_evaluacion_final,
+      ':calificacion_final' => $user->_calificacion_final,
+      ':id_registrado' => $user->_id_registrado
+    );
+
+    return $mysqli->update($query, $parametros);
+  }
+
   public static function insertRespuestas($data){
     $mysqli = Database::getInstance(1);
     $query=<<<sql
@@ -269,6 +284,15 @@ sql;
 
    
     return $mysqli->queryAll($query);
+}
+
+public static function getDataUser($id_registrado){
+    $mysqli = Database::getInstance(true);
+    $query =<<<sql
+    SELECT * FROM registrados WHERE id_registrado = $id_registrado
+sql;
+
+    return $mysqli->queryOne($query);
 }
 
 

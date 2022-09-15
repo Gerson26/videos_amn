@@ -174,7 +174,7 @@ html;
         $secs_totales_t1 = (intval($duracion_t1) * 60);
         $porcentaje_t1 = round(($secs_t1['minutos'] * 100) / $duracion_t1);
 
-        $preguntas  = TalleresDao::getPreguntasByTransmision($transmision_1['id_transmision']);
+        $preguntas  = TalleresDao::getPreguntasByTransmision(1);// parametro es el id de la evaluaucion
         $pregs = '';
         $num_pregunta = 1;
 
@@ -182,7 +182,7 @@ html;
             $pregs .= <<<html
             <div class="col-12">
                 <div class="mb-3 text-dark">
-                    <h6 class="">{$value['pregunta']}</h6>
+                    <h6 class="">{$value['orden']}) {$value['pregunta']}</h6>
                 </div>
 html;
             $respuestas = TalleresDao::getRespuestasByPreguntas($value['id_pregunta']);
@@ -204,6 +204,37 @@ html;
 html;
         }
 
+        //segundo examen
+        $preguntas_2  = TalleresDao::getPreguntasByTransmision(2);// parametro es el id de la evaluaucion
+        $pregs_2 = '';
+        $num_pregunta_2 = 1;
+
+        foreach ($preguntas_2 as $key => $value) {
+            $pregs_2 .= <<<html
+            <div class="col-12">
+                <div class="mb-3 text-dark">
+                    <h6 class="">{$value['orden']}) {$value['pregunta']}</h6>
+                </div>
+html;
+            $respuestas_2 = TalleresDao::getRespuestasByPreguntas($value['id_pregunta']);
+
+
+            // <!--aqui van las opciones-->
+            foreach ($respuestas_2 as $key => $value2) {
+                $pregs_2 .= <<<html
+                
+                <div class="form-group pregunta_evaluacion_$num_pregunta_2">                    
+                    <input type="radio"  id="opcion_preg_{$value2['id_respuesta']}" name="opcion_preg_{$value2['id_pregunta']}_{$value['id_evaluacion']}" value="{$value2['id_respuesta']}" required>
+                    <label class=" form-label opcion-encuesta" for="opcion_preg_{$value2['id_respuesta']}">{$value2['valor']}) {$value2['respuesta']}</label>                    
+                </div>
+html;
+            }
+
+            $pregs_2 .= <<<html
+                </div>
+html;
+        }
+
         
 
 
@@ -220,6 +251,7 @@ html;
 
         View::set('secs_t1', $secs_t1);
         View::set('preguntas', $pregs);
+        View::set('preguntas_2', $pregs_2);
         View::set('id_evaluacion',$preguntas[0]['id_evaluacion']);
 
         View::set('info_user', $info_user);
@@ -582,23 +614,6 @@ html;
         $secs_totales_t2 = (intval($duracion_t2) * 60);
         $porcentaje_t2 = round(($secs_t2['minutos'] * 100) / $duracion_t2);
 
-
-        // echo 'duracion '.$duracion_t1 . '<br>';
-        // echo 'seguntos '.$secs_totales_t1 .'<br>';
-        // echo 'porcentaje'.$porcentaje_t1;
-
-
-        // echo 'duracion '.$duracion_t2 . '<br>';
-        // echo 'seguntos '.$secs_totales_t2 .'<br>';
-        // echo 'porcentaje'.$porcentaje_t2;
-
-
-
-
-        // exit;
-
-
-
         View::set('transmision_2', $transmision_2);
 
         View::set('chat_transmision_2', $cont_chat_2);
@@ -926,8 +941,81 @@ html;
             $documento->_calificacion_inicial = number_format($calificacion_inicial,1);
             $documento->_id_registrado = $_SESSION['id_registrado'];
 
+            $getDataUser = TransmisionDao::getDataUser($_SESSION['id_registrado']);
 
-            $updateDataUser = TransmisionDao::updateDataUser($documento);
+            // var_dump($getDataUser);
+            if($getDataUser['evaluacion_inicial'] == 0 || $getDataUser['evaluacion_inicial'] == "0"){
+                $updateDataUser = TransmisionDao::updateDataUser($documento);
+            }else{
+                $updateDataUser = true;
+            }
+            
+
+            if($updateDataUser){
+                echo "success";
+            }else{
+                echo "fail";
+            }
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            echo "fail";
+        }
+    }
+
+    public function saveExamenOriginal()
+    {
+
+        try {
+            $respuestas = $_POST;
+            $id_evaluacion = '';
+
+            
+            foreach ($respuestas as $key => $value) {
+                $names  = $key;
+                $name = explode("_", $names);                
+                $id_pregunta = intval($name[2]); //id_pregunta
+                $id_evaluacion = intval($name[3]);//id_evaluacion   
+                
+                $data = new \stdClass();
+
+                $data->_pregunta_id = $id_pregunta;
+                $data->_respuesta_id = $value;
+                $data->_id_registrado = $_SESSION['id_registrado'];
+
+                // $getTotalRespuestas = TransmisionDao::getTotalRespuestasByUserAndEvaluacion($_SESSION['id_registrado'],$id_evaluacion);
+                // if(!$getTotalRespuestas){
+                    
+                    $insertRespuestas = TransmisionDao::insertRespuestas($data);
+                // }            
+                
+            }            
+
+            $getTotalRespuestas = TransmisionDao::getTotalRespuestasByUserAndEvaluacion($_SESSION['id_registrado'],$id_evaluacion);
+            $total_preguntas = count($getTotalRespuestas);
+            $count = 0;
+            foreach ($getTotalRespuestas as $key => $value) {
+                if($value['status_correcta'] == 1){
+                    $count++;
+                }
+            }
+            $calificacion_final = (($count / $total_preguntas) * 100) / 10;
+            // echo number_format($calificacion_final,1);
+            $documento = new \stdClass();
+
+            $documento->_evaluacion_final = 1;
+            $documento->_calificacion_final = number_format($calificacion_final,1);
+            $documento->_id_registrado = $_SESSION['id_registrado'];
+
+            $getDataUser = TransmisionDao::getDataUser($_SESSION['id_registrado']);
+
+            // var_dump($getDataUser);
+            if($getDataUser['evaluacion_final'] == 0 || $getDataUser['evaluacion_final'] == "0"){
+                $updateDataUser = TransmisionDao::updateDataUserCalificacionFinal($documento);
+            }else{
+                $updateDataUser = true;
+            }
+            
 
             if($updateDataUser){
                 echo "success";

@@ -77,7 +77,8 @@
                                 <input type="text" id="nombre_t1" value="<?php echo $transmision_1['nombre']; ?>" readonly hidden>
                                 <input type="text" id="nombre_t2" value="<?php echo $transmision_2['nombre']; ?>" readonly hidden>
                                 <p class="mb-0 font-weight-bold text-sm">
-                                    <input type="text" id="evaluacion_inicial" name="evaluacion_inicial" value="<?php echo $info_user['evaluacion_inicial'] ?>">
+                                    <input type="hidden" id="evaluacion_inicial" name="evaluacion_inicial" value="<?php echo $info_user['evaluacion_inicial'] ?>">
+                                    <input type="hidden" id="evaluacion_final" name="evaluacion_final" value="<?php echo $info_user['evaluacion_final'] ?>">
                                 </p>
                             </div>
                         </div>
@@ -87,7 +88,7 @@
                                 <div class="row text-center">
                                     <div class="col-lg-12 col-md-12 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
                                         <div class="nav-wrapper position-relative end-0">
-                                            <ul class="nav nav-pills nav-fill p-1 bg-transparent-yellow" role="tablist">
+                                            <!-- <ul class="nav nav-pills nav-fill p-1 bg-transparent-yellow" role="tablist">
                                                 <li class="nav-item transmisiones px-3" data-transmision="1">
                                                     <a class="nav-link mb-0 px-0 py-1 active" href="#transmision_1" data-bs-toggle="tab" role="tab" aria-selected="true">
                                                         <span class="fa fa-video"></span>
@@ -100,7 +101,7 @@
                                                         <span class="ms-1">Sala 2</span>
                                                     </a>
                                                 </li>
-                                            </ul>
+                                            </ul> -->
                                         </div>
                                     </div>
                                 </div>
@@ -128,7 +129,7 @@
                                             <iframe class="frame-transmision" src="<?php echo $transmision_1['url']; ?>" frameborder="0"></iframe>
                                         </section>
 
-                                        <img id="img-stanby-1" class="frame-transmision" hidden src="/assets/img/stand_by.jpg" alt="">
+                                        <img id="img-stanby-1" class="frame-transmision" src="/assets/img/stand_by.jpg" alt="" style="display: none;">
                                     </div>
                                 </div>
                                 <div class="row align-items-center px-2 mt-4 mb-2">
@@ -445,15 +446,15 @@
 
 
 
-<!-- Modal -->
+<!-- Modal examen diagnostico-->
 <div class="modal fade" id="examenDiagnostico" tabindex="-1" role="dialog" aria-labelledby="examenDiagnosticoLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="examenDiagnosticoLabel">Examen Diagnostico</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                </button>
+                </button> -->
             </div>
             <form id="form_enviar_respuestas">
 
@@ -463,13 +464,40 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn bg-gradient-primary" id="btn_save_evaluacion">Save changes</button>
+                    <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal" style="display: none;">Cerrar</button>
+                    <button type="submit" class="btn bg-gradient-primary" id="btn_save_evaluacion">Guardar</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<!-- Modal examen -->
+<div class="modal fade" id="examenOriginal" tabindex="-1" role="dialog" aria-labelledby="examenOriginalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="examenOriginalLabel">Examen Original</h5>
+                <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> -->
+            </div>
+            <form id="form_enviar_respuestas_2">
+
+                <div class="modal-body">
+                    <div class="row">
+                        <?php echo $preguntas_2?>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-gradient-secondary" id="btn_cerrar_modal_exam_ori" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn bg-gradient-primary" id="btn_save_evaluacion">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 
 <script>
@@ -668,28 +696,23 @@
         let status_1 = $('#status_t1').val();
         let status_2 = $('#status_t2').val();
 
-        // let tiempo_1 = $('#duracion_t1').val();
-        // let duracion_1 = (parseInt(tiempo_1.substr(0, tiempo_1.indexOf(':'))) * 3600) + (parseInt(tiempo_1.substr(tiempo_1.length - 5, 2)) * 60) + (parseInt(tiempo_1.substr(tiempo_1.length - 2, 2)));
-
-        // let tiempo_2 = $('#duracion_t2').val();
-        // let duracion_2 = (parseInt(tiempo_2.substr(0, tiempo_2.indexOf(':'))) * 3600) + (parseInt(tiempo_2.substr(tiempo_2.length - 5, 2)) * 60) + (parseInt(tiempo_2.substr(tiempo_2.length - 2, 2)));
 
         // Esconder el iframe y mostrar la imagen si la transmision no está activa
-        if (status_1 == 2) {
-            $('#iframe_1_section').attr('hidden', false);
-            $('#img-stanby-1').attr('hidden', true);
+        if (status_1 == 1) {
+            $('#iframe_1_section').css('display', 'block');
+            $('#img-stanby-1').css('display', 'none');
         } else {
-            $('#iframe_1_section').attr('hidden', true);
-            $('#img-stanby-1').attr('hidden', false);
+            $('#iframe_1_section').css('display', 'none');
+            $('#img-stanby-1').css('display', 'block');
         }
 
-        if (status_2 == 2) {
-            $('#iframe_2_section').attr('hidden', false);
-            $('#img-stanby-2').attr('hidden', true);
-        } else {
-            $('#iframe_2_section').attr('hidden', true);
-            $('#img-stanby-2').attr('hidden', false);
-        }
+        // if (status_2 == 2) {
+        //     $('#iframe_2_section').attr('hidden', false);
+        //     $('#img-stanby-2').attr('hidden', true);
+        // } else {
+        //     $('#iframe_2_section').attr('hidden', true);
+        //     $('#img-stanby-2').attr('hidden', false);
+        // }
 
         var intervalo;
         var intervalo_2;
@@ -714,6 +737,8 @@
         let tiempo_total = 0;
         let tiempo_total_2 = 0;
 
+        var evaluacion_final = $("#evaluacion_final").val();
+
         function countTime() {
             intervalo = setInterval(function() {
                 tiempo_total++;
@@ -731,8 +756,8 @@
 
                 }
 
-                if (porcentaje_num >= 79) {
-                    $('#btn-examen').html('<button type="button" class="btn btn-primary" style="background-color: orangered!important;" data-toggle="modal" data-target="#examenDiagnostico">Examen</button>');
+                if (porcentaje_num >= 90 && evaluacion_final == 0 ) {
+                    $('#btn-examen').html('<button type="button" id="btn_examen_original" class="btn btn-primary" style="background-color: orangered!important;" data-bs-toggle="modal" data-bs-target="#examenOriginal">Examen</button>');
                 }
 
                 $('#barra_progreso_1').val(inicio);
@@ -782,6 +807,42 @@
                         Swal.fire('Se ha guardado su examen diganostico correctamente', '', 'success')
                         $('#examenDiagnostico').modal('toggle');
                         countTime();
+                    } else {
+                        Swal.fire('Hubo un error al guardar su información', 'ontacte a soporte', 'error')
+
+                    }
+
+                },
+                error: function(respuesta) {
+                    console.log(respuesta);
+
+                }
+            });
+        });
+
+
+        $("#form_enviar_respuestas_2").on("submit", function(event) {
+            event.preventDefault(event);
+            var formData = new FormData(document.getElementById("form_enviar_respuestas_2"));
+
+            $.ajax({
+                url: "/Transmission/saveExamenOriginal",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                beforeSend: function() {
+                    event.preventDefault();
+                    console.log("Procesando....");
+                    // alert('Se está borrando');
+                },
+                success: function(respuesta) {
+                    console.log(respuesta);
+                    if (respuesta == "success") {
+                        Swal.fire('Se ha guardado su examen correctamente', '', 'success')
+                        $('#examenOriginal').modal('toggle');
+                        $('#btn-examen').css('display','none');                        
+                        
                     } else {
                         Swal.fire('Hubo un error al guardar su información', 'ontacte a soporte', 'error')
 

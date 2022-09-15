@@ -227,15 +227,14 @@ sql;
 
   //examne
 
-  public static function getPreguntasByTransmision($id_transmision)
+  public static function getPreguntasByTransmision($id_evaluacion)
   {
     $mysqli = Database::getInstance();
     $query = <<<sql
-    SELECT eva.id_transmision, pregeva.*
-    FROM transmision t
-    INNER JOIN evaluaciones eva ON (eva.id_transmision = t.id_transmision)
+    SELECT pregeva.*   
+    FROM evaluaciones eva
     INNER JOIN preg_evaluacion_inicial pregeva ON (pregeva.id_evaluacion = eva.id_evaluacion)
-    WHERE t.id_transmision = $id_transmision
+    WHERE eva.id_evaluacion = $id_evaluacion
 sql;
     return $mysqli->queryAll($query);
   }
@@ -247,7 +246,7 @@ sql;
     SELECT preresp.*,resp.*
     FROM preg_resp_evaluacioninicial preresp
     INNER JOIN respuestas_evaluacioninicial resp ON (preresp.id_respuesta = resp.id)
-    WHERE preresp.id_pregunta = $id_pregunta;
+    WHERE preresp.id_pregunta = $id_pregunta
 sql;
     return $mysqli->queryAll($query);
   }
