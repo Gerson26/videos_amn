@@ -21,6 +21,7 @@ class Programa extends Controller{
     }
 
     public function index() {
+        header("location: /transmission/");
         $extraHeader =<<<html
 html;
         $extraFooter =<<<html

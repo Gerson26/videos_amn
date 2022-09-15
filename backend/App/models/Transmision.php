@@ -296,6 +296,24 @@ sql;
 }
 
 
+public static function searchRespuestas($id_evaluacion){
+    $mysqli = Database::getInstance(true);
+    $query =<<<sql
+    SELECT count(*) as total
+    FROM registro_encuesta_evaluacioninicial ree
+    INNER JOIN preg_evaluacion_inicial pei ON (ree.pregunta_id = pei.id_pregunta)
+    WHERE pei.id_evaluacion = $id_evaluacion
+sql;
+
+    // $parametros = array(
+    //     ':pregunta_id'=>$data->_pregunta_id,
+    //     ':respuesta_id'=>$data->_respuesta_id,
+    //     ':id_registrado'=>$data->_id_registrado
+    // );
+    return $mysqli->queryOne($query);
+}
+
+
 
     
 }

@@ -486,12 +486,12 @@
 
                 <div class="modal-body">
                     <div class="row">
-                        <?php echo $preguntas_2?>
+                        <?php echo $preguntas_2 ?>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn bg-gradient-secondary" id="btn_cerrar_modal_exam_ori" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn bg-gradient-primary" id="btn_save_evaluacion">Guardar</button>
+                    <button type="submit" class="btn bg-gradient-primary" id="btn_save_evaluacion_2">Guardar</button>
                 </div>
             </form>
         </div>
@@ -756,7 +756,7 @@
 
                 }
 
-                if (porcentaje_num >= 90 && evaluacion_final == 0 ) {
+                if (porcentaje_num >= 90 && evaluacion_final == 0) {
                     $('#btn-examen').html('<button type="button" id="btn_examen_original" class="btn btn-primary" style="background-color: orangered!important;" data-bs-toggle="modal" data-bs-target="#examenOriginal">Examen</button>');
                 }
 
@@ -790,34 +790,48 @@
             event.preventDefault(event);
             var formData = new FormData(document.getElementById("form_enviar_respuestas"));
 
-            $.ajax({
-                url: "/Transmission/saveExamen",
-                type: "POST",
-                data: formData,
-                contentType: false,
-                processData: false,
-                beforeSend: function() {
-                    event.preventDefault();
-                    console.log("Procesando....");
-                    // alert('Se está borrando');
-                },
-                success: function(respuesta) {
-                    console.log(respuesta);
-                    if (respuesta == "success") {
-                        Swal.fire('Se ha guardado su examen diganostico correctamente', '', 'success')
-                        $('#examenDiagnostico').modal('toggle');
-                        countTime();
-                    } else {
-                        Swal.fire('Hubo un error al guardar su información', 'ontacte a soporte', 'error')
+            Swal.fire({
+                title: '¿Estas seguro de tus respuestas?',
+                text: "¡No podrás contestarlo de nuevo!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si!'
+            }).then((result) => {
+                if (result.isConfirmed) {
 
-                    }
+                    $.ajax({
+                        url: "/Transmission/saveExamen",
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function() {
+                            event.preventDefault();
+                            console.log("Procesando....");
+                            // alert('Se está borrando');
+                        },
+                        success: function(respuesta) {
+                            console.log(respuesta);
+                            if (respuesta == "success") {
+                                Swal.fire('Se ha guardado su examen diganostico correctamente', '', 'success')
+                                $('#examenDiagnostico').modal('toggle');
+                                countTime();
+                            } else {
+                                Swal.fire('Hubo un error al guardar su información', 'ontacte a soporte', 'error')
 
-                },
-                error: function(respuesta) {
-                    console.log(respuesta);
+                            }
 
+                        },
+                        error: function(respuesta) {
+                            console.log(respuesta);
+
+                        }
+                    });
                 }
-            });
+            })
+
         });
 
 
@@ -825,35 +839,51 @@
             event.preventDefault(event);
             var formData = new FormData(document.getElementById("form_enviar_respuestas_2"));
 
-            $.ajax({
-                url: "/Transmission/saveExamenOriginal",
-                type: "POST",
-                data: formData,
-                contentType: false,
-                processData: false,
-                beforeSend: function() {
-                    event.preventDefault();
-                    console.log("Procesando....");
-                    // alert('Se está borrando');
-                },
-                success: function(respuesta) {
-                    console.log(respuesta);
-                    if (respuesta == "success") {
-                        Swal.fire('Se ha guardado su examen correctamente', '', 'success')
-                        $('#examenOriginal').modal('toggle');
-                        $('#btn-examen').css('display','none');                        
-                        
-                    } else {
-                        Swal.fire('Hubo un error al guardar su información', 'ontacte a soporte', 'error')
+            Swal.fire({
+                title: '¿Estas seguro de tus respuestas?',
+                text: "¡No podrás contestarlo de nuevo!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si!'
+            }).then((result) => {
 
-                    }
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/Transmission/saveExamenOriginal",
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function() {
+                            event.preventDefault();
+                            console.log("Procesando....");
+                            // alert('Se está borrando');
+                        },
+                        success: function(respuesta) {
+                            console.log(respuesta);
+                            if (respuesta == "success") {
+                                Swal.fire('Se ha guardado su examen correctamente', '', 'success')
+                                $('#examenOriginal').modal('toggle');
+                                $('#btn-examen').css('display', 'none');
 
-                },
-                error: function(respuesta) {
-                    console.log(respuesta);
+                            } else {
+                                Swal.fire('Hubo un error al guardar su información', 'ontacte a soporte', 'error')
+
+                            }
+
+                        },
+                        error: function(respuesta) {
+                            console.log(respuesta);
+
+                        }
+                    });
 
                 }
-            });
+            })
+
+
         });
 
 

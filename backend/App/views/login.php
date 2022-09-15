@@ -25,11 +25,11 @@ echo $header;
                     </button>
                     <div class="collapse navbar-collapse w-100 pt-3 pb-2 py-lg-0 " id="navigation">
 
-                        <ul class="navbar-nav d-lg-block">
+                        <!-- <ul class="navbar-nav d-lg-block">
                             <li class="nav-item">
                                 <button type="button" id="btn_miembro" class="btn bg-gradient-entrar w-100 mt-1 mb-0"><b style="color: white;">SOY MIEMBRO AMC</b></button>
                             </li>
-                        </ul>
+                        </ul> -->
                         <!-- <ul class="navbar-nav text-center mt-3 mb-2 d-block d-lg-none">
                             <li class="nav-item">
                                 <button type="button" class="btn btn-sm bg-gradient-info btn-round mb-0 me-1" data-toggle="modal" data-target="#doc_programa"><b style="color: #ffffff">Programa</b></button>
@@ -90,9 +90,9 @@ echo $header;
                                             <button type="button" id="btnEntrar" class="btn bg-gradient-entrar w-100 mt-1 mb-0"><b style="color: #FFFFFF;">ENTRAR</b></button>
                                         </div>
 
-                                        <div class="text-center">
+                                        <!-- <div class="text-center">
                                             <a href="/Register/" id="btn_register" type="button" class="btn bg-gradient-registrar w-100 mt-4 mb-0 font-weight-bold"><b style="color: white;">¡QUIERO REGISTRARME!</b></a>
-                                        </div>
+                                        </div> -->
                                     </form>
                                     <!-- <button type="button" style="background: #1B8586; color: #ffffff;" id="btn_modal_add" class="btn mb-0 mt-3 w-100" data-toggle="modal" data-target="#Modal_Add" disabled="">REGISTRARSE</button> -->
                                     <!-- <div class="card-footer text-center pt-0 px-lg-2 px-1">

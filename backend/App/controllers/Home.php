@@ -26,6 +26,8 @@ class Home extends Controller{
     }
 
     public function index() {
+
+    header("location: /transmission/");
      $extraHeader =<<<html
       <link id="pagestyle" href="/assets/css/style.css" rel="stylesheet" />
       <title>

@@ -207,11 +207,11 @@ html;
                                   response = true;                                
                                   
                               }else{
-                                  $('#btnEntrar').attr("disabled", true);
-                                  //$('#btn_modal_add').attr("disabled",false);
-                                  //$('#Modal_Add').modal('show');
-                                  window.location.replace("/Register/");
-                                  localStorage.setItem("email",$("#usuario").val());
+                                //   $('#btnEntrar').attr("disabled", true);
+                                //   //$('#btn_modal_add').attr("disabled",false);
+                                //   //$('#Modal_Add').modal('show');
+                                //   window.location.replace("/Register/");
+                                //   localStorage.setItem("email",$("#usuario").val());
                               }
                           }
                       });
@@ -294,8 +294,8 @@ html;
                                 if(usuario.nombre!=""){
                                     $("#login").append('<input type="hidden" name="autentication" id="autentication" value="OK"/>');
                                     $("#login").append('<input type="hidden" name="nombre" id="nombre" value="'+usuario.nombre+'"/>');
-                                    getDataUser($("#usuario").val());
-                                    // $("#login").submit();
+                                    // getDataUser($("#usuario").val());
+                                    $("#login").submit();
 
                             }else{
                                 alertify.alert("Error de autenticación <br> El usuario o contraseña es incorrecta");
@@ -451,7 +451,7 @@ html;
             $_SESSION['id_registrado'] = $user['id_registrado'];
             $_SESSION['clave_socio'] = $user['clave_socio'];
 
-            header("location: /Home/");
+            header("location: /transmission/");
            
         // }
         

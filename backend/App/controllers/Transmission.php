@@ -899,31 +899,31 @@ html;
 
     public function saveExamen()
     {
-
+        
         try {
             $respuestas = $_POST;
-            $id_evaluacion = '';
+            $id_evaluacion = 1;
 
-            
-            foreach ($respuestas as $key => $value) {
-                $names  = $key;
-                $name = explode("_", $names);                
-                $id_pregunta = intval($name[2]); //id_pregunta
-                $id_evaluacion = intval($name[3]);//id_evaluacion   
-                
-                $data = new \stdClass();
+            $searchRespuesta = TransmisionDao::searchRespuestas($id_evaluacion);//evaluacion manual
 
-                $data->_pregunta_id = $id_pregunta;
-                $data->_respuesta_id = $value;
-                $data->_id_registrado = $_SESSION['id_registrado'];
+            if($searchRespuesta['total'] == 0){
 
-                // $getTotalRespuestas = TransmisionDao::getTotalRespuestasByUserAndEvaluacion($_SESSION['id_registrado'],$id_evaluacion);
-                // if(!$getTotalRespuestas){
+                foreach ($respuestas as $key => $value) {
+                    $names  = $key;
+                    $name = explode("_", $names);                
+                    $id_pregunta = intval($name[2]); //id_pregunta
+                    $id_evaluacion = intval($name[3]);//id_evaluacion   
                     
-                    $insertRespuestas = TransmisionDao::insertRespuestas($data);
-                // }            
-                
-            }            
+                    $data = new \stdClass();
+    
+                    $data->_pregunta_id = $id_pregunta;
+                    $data->_respuesta_id = $value;
+                    $data->_id_registrado = $_SESSION['id_registrado'];
+    
+                    // $getTotalRespuestas = TransmisionDao::getTotalRespuestasByUserAndEvaluacion($_SESSION['id_registrado'],$id_evaluacion);
+                        $insertRespuestas = TransmisionDao::insertRespuestas($data);
+                }    
+            }
 
             $getTotalRespuestas = TransmisionDao::getTotalRespuestasByUserAndEvaluacion($_SESSION['id_registrado'],$id_evaluacion);
             $total_preguntas = count($getTotalRespuestas);
@@ -968,28 +968,31 @@ html;
 
         try {
             $respuestas = $_POST;
-            $id_evaluacion = '';
+            $id_evaluacion = 2;
+
+            $searchRespuesta = TransmisionDao::searchRespuestas($id_evaluacion);//evaluacion manual
+
+            if($searchRespuesta['total'] == 0){
 
             
-            foreach ($respuestas as $key => $value) {
-                $names  = $key;
-                $name = explode("_", $names);                
-                $id_pregunta = intval($name[2]); //id_pregunta
-                $id_evaluacion = intval($name[3]);//id_evaluacion   
-                
-                $data = new \stdClass();
-
-                $data->_pregunta_id = $id_pregunta;
-                $data->_respuesta_id = $value;
-                $data->_id_registrado = $_SESSION['id_registrado'];
-
-                // $getTotalRespuestas = TransmisionDao::getTotalRespuestasByUserAndEvaluacion($_SESSION['id_registrado'],$id_evaluacion);
-                // if(!$getTotalRespuestas){
+                foreach ($respuestas as $key => $value) {
+                    $names  = $key;
+                    $name = explode("_", $names);                
+                    $id_pregunta = intval($name[2]); //id_pregunta
+                    $id_evaluacion = intval($name[3]);//id_evaluacion   
                     
-                    $insertRespuestas = TransmisionDao::insertRespuestas($data);
-                // }            
-                
-            }            
+                    $data = new \stdClass();
+
+                    $data->_pregunta_id = $id_pregunta;
+                    $data->_respuesta_id = $value;
+                    $data->_id_registrado = $_SESSION['id_registrado'];
+
+                    // $getTotalRespuestas = TransmisionDao::getTotalRespuestasByUserAndEvaluacion($_SESSION['id_registrado'],$id_evaluacion);
+                                            
+                    $insertRespuestas = TransmisionDao::insertRespuestas($data);                              
+                    
+                }    
+            }        
 
             $getTotalRespuestas = TransmisionDao::getTotalRespuestasByUserAndEvaluacion($_SESSION['id_registrado'],$id_evaluacion);
             $total_preguntas = count($getTotalRespuestas);
