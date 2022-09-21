@@ -161,6 +161,11 @@ html;
 
         if ($secs_t1) {
             $secs_t1 = TransmisionDao::getProgrsoTransmision($_SESSION['id_registrado'], $transmision_1['id_transmision']);
+            $secs_total_transmissions = TransmisionDao::getProgrsoTransmisionsTotal($_SESSION['id_registrado']);
+            $secs_total_transmissions_minutes = 0;
+            foreach($secs_total_transmissions as $key => $value){
+                $secs_total_transmissions_minutes += $value['minutos'];
+            }
         } else {
             TransmisionDao::insertProgreso($_SESSION['id_registrado'], $transmision_1['id_transmision'], $transmision_1['sala']);
             $secs_t1 = TransmisionDao::getProgrsoTransmision($_SESSION['id_registrado'], $transmision_1['id_transmision']);
@@ -235,7 +240,11 @@ html;
 html;
         }
 
-        
+        //get info transmision general porcentaje 
+        $getTransmisionsTotalMinutes = TransmisionDao::getTransmisionsTotalMinutes();
+        $duracion_genral = $getTransmisionsTotalMinutes['duracion'];
+        $secs_totales_general = (intval($duracion_genral) * 60);
+        $porcentaje_general = round(($secs_total_transmissions_minutes * 100) / $duracion_genral);
 
 
         $id_registrado = $_SESSION['id_registrado'];
@@ -248,6 +257,259 @@ html;
         View::set('porcentaje_t1', $porcentaje_t1);
         View::set('secs_totales_t1', $secs_totales_t1);
         View::set('duracion_t1', $duracion_t1);
+
+
+        View::set('porcentaje_general', $porcentaje_general);
+        View::set('secs_totales_general', $secs_totales_general);
+        View::set('secs_total_transmissions_minutes', $secs_total_transmissions_minutes);
+
+        View::set('secs_t1', $secs_t1);
+        View::set('preguntas', $pregs);
+        View::set('preguntas_2', $pregs_2);
+        View::set('id_evaluacion',$preguntas[0]['id_evaluacion']);
+
+        View::set('info_user', $info_user);
+        View::set('id_registrado', $id_registrado);
+        View::set('header', $this->_contenedor->header($extraHeader));
+        View::set('footer', $extraFooter);
+        View::render("transmission");
+    }
+
+    public function video($id_video)
+    {
+        $extraHeader = <<<html
+html;
+
+        $extraFooter = <<<html
+    <!--footer class="footer pt-0">
+              <div class="container-fluid">
+                  <div class="row align-items-center justify-content-lg-between">
+                      <div class="col-lg-6 mb-lg-0 mb-4">
+                          <div class="copyright text-center text-sm text-muted text-lg-start">
+                              © <script>
+                                  document.write(new Date().getFullYear())
+                              </script>,
+                              made with <i class="fa fa-heart"></i> by
+                              <a href="https://www.creative-tim.com" class="font-weight-bold" target="www.grupolahe.com">Creative GRUPO LAHE</a>.
+                          </div>
+                      </div>
+                      <div class="col-lg-6">
+                          <ul class="nav nav-footer justify-content-center justify-content-lg-end">
+                              <li class="nav-item">
+                                  <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted" target="_blank">privacy policies</a>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+          </footer--    >
+          <!-- jQuery -->
+            <script src="/js/jquery.min.js"></script>
+            <!--   Core JS Files   -->
+            <script src="/assets/js/core/popper.min.js"></script>
+            <script src="/assets/js/core/bootstrap.min.js"></script>
+            <script src="/assets/js/plugins/perfect-scrollbar.min.js"></script>
+            <script src="/assets/js/plugins/smooth-scrollbar.min.js"></script>
+            <!-- Kanban scripts -->
+            <script src="/assets/js/plugins/dragula/dragula.min.js"></script>
+            <script src="/assets/js/plugins/jkanban/jkanban.js"></script>
+            <script src="/assets/js/plugins/chartjs.min.js"></script>
+            <script src="/assets/js/plugins/threejs.js"></script>
+            <script src="/assets/js/plugins/orbit-controls.js"></script>
+            
+          <!-- Github buttons -->
+            <script async defer src="https://buttons.github.io/buttons.js"></script>
+          <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
+            <script src="/assets/js/soft-ui-dashboard.min.js?v=1.0.5"></script>
+ 
+          <!-- VIEJO INICIO -->
+            <script src="/js/jquery.min.js"></script>
+          
+            <script src="/js/custom.min.js"></script>
+
+            <script src="/js/validate/jquery.validate.js"></script>
+            <script src="/js/alertify/alertify.min.js"></script>
+            <script src="/js/login.js"></script>
+            <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+          <!-- VIEJO FIN -->
+   <script>
+    $( document ).ready(function() {
+
+          $("#form_vacunacion").on("submit",function(event){
+              event.preventDefault();
+              
+                  var formData = new FormData(document.getElementById("form_vacunacion"));
+                  for (var value of formData.values()) 
+                  {
+                     console.log(value);
+                  }
+                  $.ajax({
+                      url:"/Transmision/uploadComprobante",
+                      type: "POST",
+                      data: formData,
+                      cache: false,
+                      contentType: false,
+                      processData: false,
+                      beforeSend: function(){
+                      console.log("Procesando....");
+                  },
+                  success: function(respuesta){
+                      if(respuesta == 'success'){
+                         // $('#modal_payment_ticket').modal('toggle');
+                         
+                          swal("¡Se ha guardado tu prueba correctamente!", "", "success").
+                          then((value) => {
+                              window.location.replace("/Transmision/");
+                          });
+                      }
+                      console.log(respuesta);
+                  },
+                  error:function (respuesta)
+                  {
+                      console.log(respuesta);
+                  }
+              });
+          });
+
+      });
+</script>
+
+html;
+
+        $transmision_1 = TransmisionDao::getTransmisionById($id_video);
+
+
+        $data_1 = new \stdClass();
+        $data_1->_tipo = 1;
+        $data_1->_sala = 1;
+        $data_1->_id_tipo = $transmision_1['id_transmision'];
+
+        $chat_transmision_1 = TransmisionDao::getNewChatByID($data_1);
+        $cont_chat_1 = '';
+
+        foreach ($chat_transmision_1 as $chat => $value) {
+            $nombre_completo = $value['nombre'] . ' ' . $value['apellidop'] . ' ' . $value['apellidom'];
+            $cont_chat_1 .= <<<html
+            <div class="d-flex mt-3">
+                <div class="flex-shrink-0">
+                    <img alt="Image placeholder" class="avatar rounded-circle" src="../../../img/users_musa/{$value['avatar_img']}">
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <h6 class="h5 mt-0">{$nombre_completo}</h6>
+                    <p class="text-sm">{$value['chat']}</p>
+                    
+                </div>
+            </div>
+html;
+        }
+
+
+        $secs_t1 = TransmisionDao::getProgrsoTransmision($_SESSION['id_registrado'], $transmision_1['id_transmision']);
+
+
+        if ($secs_t1) {
+            $secs_t1 = TransmisionDao::getProgrsoTransmision($_SESSION['id_registrado'], $transmision_1['id_transmision']);
+            $secs_total_transmissions = TransmisionDao::getProgrsoTransmisionsTotal($_SESSION['id_registrado']);
+            $secs_total_transmissions_minutes = 0;
+            foreach($secs_total_transmissions as $key => $value){
+                $secs_total_transmissions_minutes += $value['minutos'];
+            }
+        } else {
+            TransmisionDao::insertProgreso($_SESSION['id_registrado'], $transmision_1['id_transmision'], $transmision_1['sala']);
+            $secs_t1 = TransmisionDao::getProgrsoTransmision($_SESSION['id_registrado'], $transmision_1['id_transmision']);
+        }
+
+        $info_user = DataDao::getInfoUserById($_SESSION['id_registrado']);
+
+
+        //get info transmision 1 porcentaje 
+        $duracion_t1 = $transmision_1['duracion'];
+        $secs_totales_t1 = (intval($duracion_t1) * 60);
+        $porcentaje_t1 = round(($secs_t1['minutos'] * 100) / $duracion_t1);
+
+        $preguntas  = TalleresDao::getPreguntasByTransmision(1);// parametro es el id de la evaluaucion
+        $pregs = '';
+        $num_pregunta = 1;
+
+        foreach ($preguntas as $key => $value) {
+            $pregs .= <<<html
+            <div class="col-12">
+                <div class="mb-3 text-dark">
+                    <h6 class="">{$value['orden']}) {$value['pregunta']}</h6>
+                </div>
+html;
+            $respuestas = TalleresDao::getRespuestasByPreguntas($value['id_pregunta']);
+
+
+            // <!--aqui van las opciones-->
+            foreach ($respuestas as $key => $value2) {
+                $pregs .= <<<html
+                
+                <div class="form-group pregunta_evaluacion_$num_pregunta">                    
+                    <input type="radio"  id="opcion_preg_{$value2['id_respuesta']}" name="opcion_preg_{$value2['id_pregunta']}_{$value['id_evaluacion']}" value="{$value2['id_respuesta']}" required>
+                    <label class=" form-label opcion-encuesta" for="opcion_preg_{$value2['id_respuesta']}">{$value2['valor']}) {$value2['respuesta']}</label>                    
+                </div>
+html;
+            }
+
+            $pregs .= <<<html
+                </div>
+html;
+        }
+
+        //segundo examen
+        $preguntas_2  = TalleresDao::getPreguntasByTransmision(2);// parametro es el id de la evaluaucion
+        $pregs_2 = '';
+        $num_pregunta_2 = 1;
+
+        foreach ($preguntas_2 as $key => $value) {
+            $pregs_2 .= <<<html
+            <div class="col-12">
+                <div class="mb-3 text-dark">
+                    <h6 class="">{$value['orden']}) {$value['pregunta']}</h6>
+                </div>
+html;
+            $respuestas_2 = TalleresDao::getRespuestasByPreguntas($value['id_pregunta']);
+
+
+            // <!--aqui van las opciones-->
+            foreach ($respuestas_2 as $key => $value2) {
+                $pregs_2 .= <<<html
+                
+                <div class="form-group pregunta_evaluacion_$num_pregunta_2">                    
+                    <input type="radio"  id="opcion_preg_{$value2['id_respuesta']}" name="opcion_preg_{$value2['id_pregunta']}_{$value['id_evaluacion']}" value="{$value2['id_respuesta']}" required>
+                    <label class=" form-label opcion-encuesta" for="opcion_preg_{$value2['id_respuesta']}">{$value2['valor']}) {$value2['respuesta']}</label>                    
+                </div>
+html;
+            }
+
+            $pregs_2 .= <<<html
+                </div>
+html;
+        }
+
+        //get info transmision general porcentaje 
+        $getTransmisionsTotalMinutes = TransmisionDao::getTransmisionsTotalMinutes();
+        $duracion_genral = $getTransmisionsTotalMinutes['duracion'];
+        $secs_totales_general = (intval($duracion_genral) * 60);
+        $porcentaje_general = round(($secs_total_transmissions_minutes * 100) / $duracion_genral);
+
+
+        $id_registrado = $_SESSION['id_registrado'];
+
+        View::set('transmision_1', $transmision_1);
+        // View::set('transmision_2', $transmision_2);
+        View::set('chat_transmision_1', $cont_chat_1);
+        // View::set('chat_transmision_2', $cont_chat_2);
+
+        View::set('porcentaje_t1', $porcentaje_t1);
+        View::set('secs_totales_t1', $secs_totales_t1);
+        View::set('duracion_t1', $duracion_t1);
+
+
+        View::set('porcentaje_general', $porcentaje_general);
+        View::set('secs_totales_general', $secs_totales_general);
+        View::set('secs_total_transmissions_minutes', $secs_total_transmissions_minutes);
 
         View::set('secs_t1', $secs_t1);
         View::set('preguntas', $pregs);

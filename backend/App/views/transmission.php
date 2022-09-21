@@ -79,6 +79,7 @@
                                 <p class="mb-0 font-weight-bold text-sm">
                                     <input type="hidden" id="evaluacion_inicial" name="evaluacion_inicial" value="<?php echo $info_user['evaluacion_inicial'] ?>">
                                     <input type="hidden" id="evaluacion_final" name="evaluacion_final" value="<?php echo $info_user['evaluacion_final'] ?>">
+                                    <input type="hidden" id="datos" name="datos" value="<?php echo $info_user['datos'] ?>">
                                 </p>
                             </div>
                         </div>
@@ -111,6 +112,42 @@
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col">
+
+                <div class="card mt-3">
+                    <!---->
+                    <div class="card blur shadow-blur max-height-vh-70">
+
+                        <div class="card-header shadow-lg">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class=" text-center">
+                                        <!-- <img alt="Image" src="../../../assets/img/bruce-mars.jpg" class="avatar"> -->
+                                        <div class="ms-0 text-center">
+                                            <!-- <h6 class="mb-0 d-block"><?php echo $info_user['prefijo'] . ' ' . $info_user['nombre']; ?></h6> -->
+                                            <span class="text-lg text-center text-dark opacity-8">Progreso General <span id="porcentaje_general"><?php echo $porcentaje_general; ?> %</span> </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer d-block">
+
+                            <progress id="barra_progreso_general" max="<?php echo $secs_totales_general; ?>" value="<?php echo $secs_total_transmissions_minutes * 60; ?>"></progress>
+
+                        </div>
+                        <div class="row m-auto">
+                            <div class="col-12" id="btn-examen">
+                                <?php echo $btn_encuesta; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <div class="tab-content" id="v-pills-tabContent">
             <div class="tab-pane fade show position-relative active height-350 border-radius-lg" id="transmision_1" role="tabpanel" aria-labelledby="transmision_1">
@@ -271,14 +308,14 @@
                 </div>
             </div>
 
-            <div class="tab-pane fade position-relative height-350 border-radius-lg" id="transmision_2" role="tabpanel" aria-labelledby="transmision_2">
+            <!-- <div class="tab-pane fade position-relative height-350 border-radius-lg" id="transmision_2" role="tabpanel" aria-labelledby="transmision_2">
                 <div class="row mt-4">
                     <div class="col-10 col-lg-8">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12 col-md-12 m-auto text-center">
-                                        <!-- <img alt="Image placeholder" style="width: 100%" src="https://images.unsplash.com/photo-1552581234-26160f608093?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2100&q=80" class="img-fluid border-radius-lg shadow-lg"> -->
+                                        
                                         <input type="text" readonly hidden id="secs_t2" value="<?php echo $secs_t2['segundos']; ?>">
                                         <input type="text" readonly hidden id="status_t2" value="<?php echo $transmision_2['status']; ?>">
                                         <input type="text" readonly hidden id="duracion_t2" value="<?php echo $transmision_2['duracion']; ?>">
@@ -291,22 +328,11 @@
                                     </div>
                                 </div>
                                 <div class="row align-items-center px-2 mt-4 mb-2">
-                                    <!-- <div class="col-sm-6">
-                                        <div class="d-flex">
-                                            <div class="d-flex align-items-center">
-                                                <i class="ni ni-like-2 me-1 cursor-pointer"></i>
-                                                <span class="text-sm me-3 ">150</span>
-                                            </div>
-                                            <div class="d-flex align-items-center">
-                                                <i class="ni ni-chat-round me-1 cursor-pointer"></i>
-                                                <span class="text-sm me-3">36</span>
-                                            </div>
-                                        </div>
-                                    </div> -->
+                                  
 
                                     <hr class="horizontal dark my-3">
                                 </div>
-                                <!-- Comments -->
+                               
                                 <div class="mb-1">
                                     <div id="cont_chat_2" class="text-scroll">
                                         <?php echo $chat_transmision_2; ?>
@@ -337,14 +363,14 @@
                         </div>
                     </div>
                     <div class="col-11 col-lg-4">
-                        <!-- aqui va el segudo -->
+                        
                         <div class="card">
                             <div class="card blur shadow-blur max-height-vh-70">
                                 <div class="card-header shadow-lg">
                                     <div class="row">
                                         <div class="col-md-10">
                                             <div class="d-flex align-items-center">
-                                                <!--img alt="Image" src="assets/img/bruce-mars.jpg" class="avatar"-->
+                                              
                                                 <div class="ms-3">
                                                     <div class="d-flex align-items-center">
                                                         <img alt="Image" src="../../../img/users_musa/<?php echo $info_user['avatar_img']; ?>" class="avatar">
@@ -382,16 +408,16 @@
 
 
                             <div class="card mt-3">
-                                <!---->
+                                
                                 <div class="card blur shadow-blur max-height-vh-70">
 
                                     <div class="card-header shadow-lg">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class=" text-center">
-                                                    <!-- <img alt="Image" src="../../../assets/img/bruce-mars.jpg" class="avatar"> -->
+                                                 
                                                     <div class="ms-0 text-center">
-                                                        <!-- <h6 class="mb-0 d-block"><?php echo $info_user['prefijo'] . ' ' . $info_user['nombre']; ?></h6> -->
+                                                        
                                                         <span class="text-lg text-center text-dark opacity-8">Progreso <span id="porcentaje_2"><?php echo $porcentaje_t2; ?> %</span> </span>
                                                     </div>
                                                 </div>
@@ -411,13 +437,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <!---->
+                          
 
                         </div>
 
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     </div>
@@ -499,6 +525,7 @@
 </div>
 
 
+<script src="https://player.vimeo.com/api/player.js"></script>
 
 <script>
     intervalo1();
@@ -720,69 +747,112 @@
 
 
         let inicio = $('#barra_progreso_1').val();
-        // let progreso_min = inicio / 60;
         let duracion = $('#barra_progreso_1').attr('max');
         let porcentaje_num = (inicio * 100) / parseInt(duracion);
         let increment = 1;
 
         let inicio_2 = $('#barra_progreso_2').val();
-        // let progreso_min = inicio_2 / 60;
         let duracion_2 = $('#barra_progreso_2').attr('max');
-
         let porcentaje_num_2 = (inicio_2 * 100) / parseInt(duracion_2);
         let increment_2 = 1;
+
+        let inicio_general = $('#barra_progreso_general').val();
+        let duracion_general = $('#barra_progreso_general').attr('max');
+        let porcentaje_num_general = (inicio_general * 100) / parseInt(duracion_general);
+        let increment_general = 1;
 
 
 
         let tiempo_total = 0;
         let tiempo_total_2 = 0;
+        let tiempo_total_general = 0;
 
         var evaluacion_final = $("#evaluacion_final").val();
+        // countTime(1);
+        function countTime(status) {
+            console.log(status);            
 
-        function countTime() {
-            intervalo = setInterval(function() {
-                tiempo_total++;
+            if (status == 1) {
 
-
-                if (inicio < duracion) {
-                    inicio += increment;
-
-                }
-
-                if (tiempo_total % 60 == 0) {
-                    console.log('Ejecutamos Ajax');
-
-                    actualizarProgreso($('#id_trasmision_1').val(), (inicio / 60));
-
-                }
-
-                if (porcentaje_num >= 90 && evaluacion_final == 0) {
-                    $('#btn-examen').html('<button type="button" id="btn_examen_original" class="btn btn-primary" style="background-color: orangered!important;" data-bs-toggle="modal" data-bs-target="#examenOriginal">Examen</button>');
-                }
-
-                $('#barra_progreso_1').val(inicio);
-                porcentaje_num = (inicio * 100) / parseInt(duracion);
-                $('#porcentaje_1').html(porcentaje_num.toFixed(0) + ' %');
+                intervalo = setInterval(function() {
+                    tiempo_total++;
 
 
-            }, 1000);
+                    if (inicio < duracion) {
+                        inicio += increment;
+                        inicio_general += increment_general; //incremento general
+                    }
 
+                    if (tiempo_total % 60 == 0) {
+                        console.log('Ejecutamos Ajax');
+
+                        actualizarProgreso($('#id_trasmision_1').val(), (inicio / 60));
+
+                    }
+
+                    // if (porcentaje_num >= 90 && evaluacion_final == 0) {
+                    //     $('#btn-examen').html('<button type="button" id="btn_examen_original" class="btn btn-primary" style="background-color: orangered!important;" data-bs-toggle="modal" data-bs-target="#examenOriginal">Examen</button>');
+                    // }
+
+                    if (porcentaje_num_general >= 90 && evaluacion_final == 0) {
+                        $('#btn-examen').html('<button type="button" id="btn_examen_original" class="btn btn-primary" style="background-color: orangered!important;" data-bs-toggle="modal" data-bs-target="#examenOriginal">Examen</button>');
+                    }
+
+                    $('#barra_progreso_1').val(inicio);
+                    porcentaje_num = (inicio * 100) / parseInt(duracion);
+                    $('#porcentaje_1').html(porcentaje_num.toFixed(0) + ' %');
+
+                    //barra porcentaje general
+                    $('#barra_progreso_general').val(inicio_general);
+                    porcentaje_num_general = (inicio_general * 100) / parseInt(duracion_general);
+                    $('#porcentaje_general').html(porcentaje_num_general.toFixed(0) + ' %');
+
+                }, 1000);
+            }else{
+                clearInterval(intervalo);
+            }
 
         }
 
-        var evaluacion_inicial = $("#evaluacion_inicial").val();
+        if ($("#datos").val() == 0) {
+            //actualizar datos
+            Swal.fire({
+                icon: 'info',
+                title: '',
+                text: 'Antes de comenzar te invitamos a verificar tus datos',
+                closeOnClickOutside: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                buttons: false
+            }).then((value) => {
+                window.location.replace("/account/");
+            });
+        } else {
+            var evaluacion_inicial = $("#evaluacion_inicial").val();
 
-        verificarExamenDiagnostico(evaluacion_inicial);
+            verificarExamenDiagnostico(evaluacion_inicial);
+        }
 
         function verificarExamenDiagnostico(status_examen) {
             if (status_examen == 1) {
                 // ya se contesto la evaluacion
-                countTime();
+                // countTime();
 
             } else {
                 // alert("aun no sale el modal");
-                Swal.fire("Bienvenido", "Antes de comenzar deberá contestar un examen diagnistico", 'info');
-                $("#examenDiagnostico").modal('show');
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Bienvenido',
+                    text: 'Deberá contestar un examen diagnistico',
+                    closeOnClickOutside: false,
+                    allowEscapeKey: false,
+                    allowOutsideClick: false,
+                    buttons: false
+                }).then((value) => {
+                    $("#examenDiagnostico").modal('show');
+                });
+
+
             }
         }
 
@@ -931,8 +1001,47 @@
             console.log("Ha pasado 1 segundo.");
         }
 
+        var iframe = document.querySelector('iframe');
+        var player = new Vimeo.Player(iframe);
+
+        var play = 0;
+
+        player.on('pause', function() {
+            console.log('paused the video!');
+            countTime(2);
+            play = 0;
+        });
+
+        
+        player.on('play', function() {
+            console.log('played the video!');
+            
+            if(play == 0){
+                play = 1;
+                countTime(1);
+                
+            }else{
+                console.log("ya está en play");
+            }
+        });
+
 
     });
+</script>
+
+<script>
+    // var iframe = document.querySelector('iframe');
+    // var player = new Vimeo.Player(iframe);
+
+    // player.on('pause', function() {
+    //     console.log('paused the video!');
+    // });
+
+
+    // player.on('play', function() {
+    //     console.log('played the video!');
+    //     countTime();
+    // });
 </script>
 
 <script type="text/javascript">

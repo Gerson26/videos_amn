@@ -37471,6 +37471,22 @@ cursor: pointer;
   border-radius: 50px;
 }
 
+#barra_progreso_general{
+  width: -webkit-fill-available;
+  height: 2rem;
+  -webkit-appearance: none;
+}
+
+#barra_progreso_general::-webkit-progress-bar {
+   background-color: #eee;
+   border-radius: 50px;
+}
+
+#barra_progreso_general::-webkit-progress-value {
+  background-color: rgba(23, 193, 232, 0.6);
+  border-radius: 50px;
+}
+
 .iframe-course{
   width: -webkit-fill-available;
   height: 25rem;

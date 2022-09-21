@@ -43,6 +43,20 @@ sql;
         
     }
 
+    public static function getTransmisionsTotalMinutes(){
+        $mysqli = Database::getInstance(true);
+        try {
+            $query =<<<sql
+            SELECT sum(duracion) as duracion FROM transmision
+sql;
+
+        return $mysqli->queryOne($query);
+        } catch (\Throwable $th) {
+            return false;
+        }
+        
+    }
+
     public static function getProgrsoTransmision($id,$num_transmision){
         $mysqli = Database::getInstance(true);
         $query =<<<sql
@@ -51,6 +65,16 @@ sql;
 sql;
 
         return $mysqli->queryOne($query);
+    }
+
+    public static function getProgrsoTransmisionsTotal($id){
+        $mysqli = Database::getInstance(true);
+        $query =<<<sql
+        SELECT * FROM progresos_transmision
+        WHERE id_registrado = $id
+sql;
+
+        return $mysqli->queryAll($query);
     }
 
     public static function insertProgreso($registrado,$transmision,$sala = null){

@@ -214,7 +214,7 @@
 
                                 <div class="row">
                                     <div class="button-row d-flex mt-4 col-12">
-                                        <a class="btn bg-gradient-light mb-0 js-btn-prev" href="/Home/" title="Prev">Regresar</a>
+                                        <a class="btn bg-gradient-light mb-0 js-btn-prev" href="/transmission/" title="Prev">Regresar</a>
                                         <button class="btn bg-gradient-dark ms-auto mb-0" type="submit" title="Actualizar">Actualizar</button>
                                     </div>
                                 </div>
@@ -224,7 +224,7 @@
 
 
                 <!-- Card Basic Info -->
-                <div class="card mt-4" id="fiscal-info">
+                <!-- <div class="card mt-4" id="fiscal-info">
                     <div class="card-header">
                             <h5>INFORMACIÓN FISCAL</h5>
                             
@@ -251,10 +251,6 @@
                                         <input class="multisteps-form__input form-control" type="text" id="cp_fiscal" name="cp_fiscal" maxlength="5" onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" placeholder="eg. 50398"  value="<?= $userData['cp_fiscal'] ?>">
                                     </div>
 
-                                    <!-- <div class="col-12 col-sm-4 mt-1 mt-sm-0">
-                                        <label>Metodo de Pago *</label>
-                                        <input class="multisteps-form__input form-control" type="text" id="payment_method_iva" name="payment_method_iva" placeholder="eg. CPJ41250AS" maxlength="13" onfocus="focused(this)" onfocusout="defocused(this)" value="<?= $userData['payment_method_iva'] ?>">                                        
-                                    </div> -->
 
                                     <div class="col-12 col-sm-5">
                                         <label>Correo Electrónico facturación * </label>
@@ -281,7 +277,7 @@
                                                             
                                                             
 
-                </div>
+                </div> -->
 
         </div>
         <?php echo $footer; ?>

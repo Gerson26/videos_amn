@@ -46,7 +46,7 @@ sql;
   {
     $mysqli = Database::getInstance(true);
     $query = <<<sql
-    UPDATE registrados SET nombre = :nombre, apellidop = :apellido_paterno, apellidom = :apellido_materno, telefono = :telefono, id_pais = :id_pais, 	id_estado = :id_estado  WHERE email = :email;
+    UPDATE registrados SET nombre = :nombre, apellidop = :apellido_paterno, apellidom = :apellido_materno, telefono = :telefono, id_pais = :id_pais, 	id_estado = :id_estado, datos = 1  WHERE email = :email;
 sql;
     $parametros = array(
       ':nombre' => $user->_nombre,
