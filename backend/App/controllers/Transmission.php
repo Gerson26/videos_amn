@@ -163,7 +163,7 @@ html;
             $secs_t1 = TransmisionDao::getProgrsoTransmision($_SESSION['id_registrado'], $transmision_1['id_transmision']);
             $secs_total_transmissions = TransmisionDao::getProgrsoTransmisionsTotal($_SESSION['id_registrado']);
             $secs_total_transmissions_minutes = 0;
-            foreach($secs_total_transmissions as $key => $value){
+            foreach ($secs_total_transmissions as $key => $value) {
                 $secs_total_transmissions_minutes += $value['minutos'];
             }
         } else {
@@ -179,7 +179,7 @@ html;
         $secs_totales_t1 = (intval($duracion_t1) * 60);
         $porcentaje_t1 = round(($secs_t1['minutos'] * 100) / $duracion_t1);
 
-        $preguntas  = TalleresDao::getPreguntasByTransmision(1);// parametro es el id de la evaluaucion
+        $preguntas  = TalleresDao::getPreguntasByTransmision(1); // parametro es el id de la evaluaucion
         $pregs = '';
         $num_pregunta = 1;
 
@@ -210,7 +210,7 @@ html;
         }
 
         //segundo examen
-        $preguntas_2  = TalleresDao::getPreguntasByTransmision(2);// parametro es el id de la evaluaucion
+        $preguntas_2  = TalleresDao::getPreguntasByTransmision(2); // parametro es el id de la evaluaucion
         $pregs_2 = '';
         $num_pregunta_2 = 1;
 
@@ -266,7 +266,7 @@ html;
         View::set('secs_t1', $secs_t1);
         View::set('preguntas', $pregs);
         View::set('preguntas_2', $pregs_2);
-        View::set('id_evaluacion',$preguntas[0]['id_evaluacion']);
+        View::set('id_evaluacion', $preguntas[0]['id_evaluacion']);
 
         View::set('info_user', $info_user);
         View::set('id_registrado', $id_registrado);
@@ -378,18 +378,19 @@ html;
 
         $transmision_1 = TransmisionDao::getTransmisionById($id_video);
 
+        if ($transmision_1) {
 
-        $data_1 = new \stdClass();
-        $data_1->_tipo = 1;
-        $data_1->_sala = 1;
-        $data_1->_id_tipo = $transmision_1['id_transmision'];
+            $data_1 = new \stdClass();
+            $data_1->_tipo = 1;
+            $data_1->_sala = 1;
+            $data_1->_id_tipo = $transmision_1['id_transmision'];
 
-        $chat_transmision_1 = TransmisionDao::getNewChatByID($data_1);
-        $cont_chat_1 = '';
+            $chat_transmision_1 = TransmisionDao::getNewChatByID($data_1);
+            $cont_chat_1 = '';
 
-        foreach ($chat_transmision_1 as $chat => $value) {
-            $nombre_completo = $value['nombre'] . ' ' . $value['apellidop'] . ' ' . $value['apellidom'];
-            $cont_chat_1 .= <<<html
+            foreach ($chat_transmision_1 as $chat => $value) {
+                $nombre_completo = $value['nombre'] . ' ' . $value['apellidop'] . ' ' . $value['apellidom'];
+                $cont_chat_1 .= <<<html
             <div class="d-flex mt-3">
                 <div class="flex-shrink-0">
                     <img alt="Image placeholder" class="avatar rounded-circle" src="../../../img/users_musa/{$value['avatar_img']}">
@@ -401,126 +402,132 @@ html;
                 </div>
             </div>
 html;
-        }
-
-
-        $secs_t1 = TransmisionDao::getProgrsoTransmision($_SESSION['id_registrado'], $transmision_1['id_transmision']);
-
-
-        if ($secs_t1) {
-            $secs_t1 = TransmisionDao::getProgrsoTransmision($_SESSION['id_registrado'], $transmision_1['id_transmision']);
-            $secs_total_transmissions = TransmisionDao::getProgrsoTransmisionsTotal($_SESSION['id_registrado']);
-            $secs_total_transmissions_minutes = 0;
-            foreach($secs_total_transmissions as $key => $value){
-                $secs_total_transmissions_minutes += $value['minutos'];
             }
-        } else {
-            TransmisionDao::insertProgreso($_SESSION['id_registrado'], $transmision_1['id_transmision'], $transmision_1['sala']);
+
+
             $secs_t1 = TransmisionDao::getProgrsoTransmision($_SESSION['id_registrado'], $transmision_1['id_transmision']);
-        }
-
-        $info_user = DataDao::getInfoUserById($_SESSION['id_registrado']);
 
 
-        //get info transmision 1 porcentaje 
-        $duracion_t1 = $transmision_1['duracion'];
-        $secs_totales_t1 = (intval($duracion_t1) * 60);
-        $porcentaje_t1 = round(($secs_t1['minutos'] * 100) / $duracion_t1);
+            if ($secs_t1) {
+                $secs_t1 = TransmisionDao::getProgrsoTransmision($_SESSION['id_registrado'], $transmision_1['id_transmision']);
+                $secs_total_transmissions = TransmisionDao::getProgrsoTransmisionsTotal($_SESSION['id_registrado']);
+                $secs_total_transmissions_minutes = 0;
+                foreach ($secs_total_transmissions as $key => $value) {
+                    $secs_total_transmissions_minutes += $value['minutos'];
+                }
+            } else {
+                TransmisionDao::insertProgreso($_SESSION['id_registrado'], $transmision_1['id_transmision'], $transmision_1['sala']);
+                $secs_t1 = TransmisionDao::getProgrsoTransmision($_SESSION['id_registrado'], $transmision_1['id_transmision']);
+            }
 
-        $preguntas  = TalleresDao::getPreguntasByTransmision(1);// parametro es el id de la evaluaucion
-        $pregs = '';
-        $num_pregunta = 1;
+            $info_user = DataDao::getInfoUserById($_SESSION['id_registrado']);
 
-        foreach ($preguntas as $key => $value) {
-            $pregs .= <<<html
+
+            //get info transmision 1 porcentaje 
+            $duracion_t1 = $transmision_1['duracion'];
+            $secs_totales_t1 = (intval($duracion_t1) * 60);
+            $porcentaje_t1 = round(($secs_t1['minutos'] * 100) / $duracion_t1);
+
+            $preguntas  = TalleresDao::getPreguntasByTransmision(1); // parametro es el id de la evaluaucion
+            $pregs = '';
+            $num_pregunta = 1;
+
+            foreach ($preguntas as $key => $value) {
+                $pregs .= <<<html
             <div class="col-12">
                 <div class="mb-3 text-dark">
                     <h6 class="">{$value['orden']}) {$value['pregunta']}</h6>
                 </div>
 html;
-            $respuestas = TalleresDao::getRespuestasByPreguntas($value['id_pregunta']);
+                $respuestas = TalleresDao::getRespuestasByPreguntas($value['id_pregunta']);
 
 
-            // <!--aqui van las opciones-->
-            foreach ($respuestas as $key => $value2) {
-                $pregs .= <<<html
+                // <!--aqui van las opciones-->
+                foreach ($respuestas as $key => $value2) {
+                    $pregs .= <<<html
                 
                 <div class="form-group pregunta_evaluacion_$num_pregunta">                    
                     <input type="radio"  id="opcion_preg_{$value2['id_respuesta']}" name="opcion_preg_{$value2['id_pregunta']}_{$value['id_evaluacion']}" value="{$value2['id_respuesta']}" required>
                     <label class=" form-label opcion-encuesta" for="opcion_preg_{$value2['id_respuesta']}">{$value2['valor']}) {$value2['respuesta']}</label>                    
                 </div>
 html;
-            }
+                }
 
-            $pregs .= <<<html
+                $pregs .= <<<html
                 </div>
 html;
-        }
+            }
 
-        //segundo examen
-        $preguntas_2  = TalleresDao::getPreguntasByTransmision(2);// parametro es el id de la evaluaucion
-        $pregs_2 = '';
-        $num_pregunta_2 = 1;
+            //segundo examen
+            $preguntas_2  = TalleresDao::getPreguntasByTransmision(2); // parametro es el id de la evaluaucion
+            $pregs_2 = '';
+            $num_pregunta_2 = 1;
 
-        foreach ($preguntas_2 as $key => $value) {
-            $pregs_2 .= <<<html
+            foreach ($preguntas_2 as $key => $value) {
+                $pregs_2 .= <<<html
             <div class="col-12">
                 <div class="mb-3 text-dark">
                     <h6 class="">{$value['orden']}) {$value['pregunta']}</h6>
                 </div>
 html;
-            $respuestas_2 = TalleresDao::getRespuestasByPreguntas($value['id_pregunta']);
+                $respuestas_2 = TalleresDao::getRespuestasByPreguntas($value['id_pregunta']);
 
 
-            // <!--aqui van las opciones-->
-            foreach ($respuestas_2 as $key => $value2) {
-                $pregs_2 .= <<<html
+                // <!--aqui van las opciones-->
+                foreach ($respuestas_2 as $key => $value2) {
+                    $pregs_2 .= <<<html
                 
                 <div class="form-group pregunta_evaluacion_$num_pregunta_2">                    
                     <input type="radio"  id="opcion_preg_{$value2['id_respuesta']}" name="opcion_preg_{$value2['id_pregunta']}_{$value['id_evaluacion']}" value="{$value2['id_respuesta']}" required>
                     <label class=" form-label opcion-encuesta" for="opcion_preg_{$value2['id_respuesta']}">{$value2['valor']}) {$value2['respuesta']}</label>                    
                 </div>
 html;
-            }
+                }
 
-            $pregs_2 .= <<<html
+                $pregs_2 .= <<<html
                 </div>
 html;
+            }
+
+            //get info transmision general porcentaje 
+            $getTransmisionsTotalMinutes = TransmisionDao::getTransmisionsTotalMinutes();
+            $duracion_genral = $getTransmisionsTotalMinutes['duracion'];
+            $secs_totales_general = (intval($duracion_genral) * 60);
+            $porcentaje_general = round(($secs_total_transmissions_minutes * 100) / $duracion_genral);
+
+
+            $id_registrado = $_SESSION['id_registrado'];
+
+            View::set('transmision_1', $transmision_1);
+            // View::set('transmision_2', $transmision_2);
+            View::set('chat_transmision_1', $cont_chat_1);
+            // View::set('chat_transmision_2', $cont_chat_2);
+
+            View::set('porcentaje_t1', $porcentaje_t1);
+            View::set('secs_totales_t1', $secs_totales_t1);
+            View::set('duracion_t1', $duracion_t1);
+
+
+            View::set('porcentaje_general', $porcentaje_general);
+            View::set('secs_totales_general', $secs_totales_general);
+            View::set('secs_total_transmissions_minutes', $secs_total_transmissions_minutes);
+
+            View::set('secs_t1', $secs_t1);
+            View::set('preguntas', $pregs);
+            View::set('preguntas_2', $pregs_2);
+            View::set('id_evaluacion', $preguntas[0]['id_evaluacion']);
+
+            View::set('info_user', $info_user);
+            View::set('id_registrado', $id_registrado);
+            View::set('header', $this->_contenedor->header($extraHeader));
+            View::set('footer', $extraFooter);
+            View::render("transmission");
+        }else{
+            echo "<script>
+                alert('Lo sentimos la página que buscas no existe');
+                window.location.href = '/transmission/video/1';
+            </script>";
         }
-
-        //get info transmision general porcentaje 
-        $getTransmisionsTotalMinutes = TransmisionDao::getTransmisionsTotalMinutes();
-        $duracion_genral = $getTransmisionsTotalMinutes['duracion'];
-        $secs_totales_general = (intval($duracion_genral) * 60);
-        $porcentaje_general = round(($secs_total_transmissions_minutes * 100) / $duracion_genral);
-
-
-        $id_registrado = $_SESSION['id_registrado'];
-
-        View::set('transmision_1', $transmision_1);
-        // View::set('transmision_2', $transmision_2);
-        View::set('chat_transmision_1', $cont_chat_1);
-        // View::set('chat_transmision_2', $cont_chat_2);
-
-        View::set('porcentaje_t1', $porcentaje_t1);
-        View::set('secs_totales_t1', $secs_totales_t1);
-        View::set('duracion_t1', $duracion_t1);
-
-
-        View::set('porcentaje_general', $porcentaje_general);
-        View::set('secs_totales_general', $secs_totales_general);
-        View::set('secs_total_transmissions_minutes', $secs_total_transmissions_minutes);
-
-        View::set('secs_t1', $secs_t1);
-        View::set('preguntas', $pregs);
-        View::set('preguntas_2', $pregs_2);
-        View::set('id_evaluacion',$preguntas[0]['id_evaluacion']);
-
-        View::set('info_user', $info_user);
-        View::set('id_registrado', $id_registrado);
-        View::set('header', $this->_contenedor->header($extraHeader));
-        View::set('footer', $extraFooter);
-        View::render("transmission");
     }
 
     public function sala1()
@@ -1122,6 +1129,31 @@ html;
         echo json_encode($chat_transmision);
     }
 
+    public function getVideo()
+    {
+
+
+        try {
+            $id_video_siguiente = $_POST['id_video_siguiente'];
+            $id_video_anterior = $_POST['id_video_anterior'];
+
+            $transmision = TransmisionDao::getTransmisionByIds($id_video_anterior, $id_video_siguiente);
+
+            $data = [
+                'status' => 'success',
+                'video' => $transmision
+            ];
+        } catch (\Throwable $th) {
+
+            $data = [
+                'status' => 'error'
+            ];
+        }
+
+        echo json_encode($data);
+    }
+
+
     public function updateProgress()
     {
         $progreso = $_POST['segundos'];
@@ -1161,37 +1193,37 @@ html;
 
     public function saveExamen()
     {
-        
+
         try {
             $respuestas = $_POST;
             $id_evaluacion = 1;
 
-            $searchRespuesta = TransmisionDao::searchRespuestas($id_evaluacion);//evaluacion manual
+            $searchRespuesta = TransmisionDao::searchRespuestas($id_evaluacion); //evaluacion manual
 
-            if($searchRespuesta['total'] == 0){
+            if ($searchRespuesta['total'] == 0) {
 
                 foreach ($respuestas as $key => $value) {
                     $names  = $key;
-                    $name = explode("_", $names);                
+                    $name = explode("_", $names);
                     $id_pregunta = intval($name[2]); //id_pregunta
-                    $id_evaluacion = intval($name[3]);//id_evaluacion   
-                    
+                    $id_evaluacion = intval($name[3]); //id_evaluacion   
+
                     $data = new \stdClass();
-    
+
                     $data->_pregunta_id = $id_pregunta;
                     $data->_respuesta_id = $value;
                     $data->_id_registrado = $_SESSION['id_registrado'];
-    
+
                     // $getTotalRespuestas = TransmisionDao::getTotalRespuestasByUserAndEvaluacion($_SESSION['id_registrado'],$id_evaluacion);
-                        $insertRespuestas = TransmisionDao::insertRespuestas($data);
-                }    
+                    $insertRespuestas = TransmisionDao::insertRespuestas($data);
+                }
             }
 
-            $getTotalRespuestas = TransmisionDao::getTotalRespuestasByUserAndEvaluacion($_SESSION['id_registrado'],$id_evaluacion);
+            $getTotalRespuestas = TransmisionDao::getTotalRespuestasByUserAndEvaluacion($_SESSION['id_registrado'], $id_evaluacion);
             $total_preguntas = count($getTotalRespuestas);
             $count = 0;
             foreach ($getTotalRespuestas as $key => $value) {
-                if($value['status_correcta'] == 1){
+                if ($value['status_correcta'] == 1) {
                     $count++;
                 }
             }
@@ -1200,25 +1232,24 @@ html;
             $documento = new \stdClass();
 
             $documento->_evaluacion_inicial = 1;
-            $documento->_calificacion_inicial = number_format($calificacion_inicial,1);
+            $documento->_calificacion_inicial = number_format($calificacion_inicial, 1);
             $documento->_id_registrado = $_SESSION['id_registrado'];
 
             $getDataUser = TransmisionDao::getDataUser($_SESSION['id_registrado']);
 
             // var_dump($getDataUser);
-            if($getDataUser['evaluacion_inicial'] == 0 || $getDataUser['evaluacion_inicial'] == "0"){
+            if ($getDataUser['evaluacion_inicial'] == 0 || $getDataUser['evaluacion_inicial'] == "0") {
                 $updateDataUser = TransmisionDao::updateDataUser($documento);
-            }else{
+            } else {
                 $updateDataUser = true;
             }
-            
 
-            if($updateDataUser){
+
+            if ($updateDataUser) {
                 echo "success";
-            }else{
+            } else {
                 echo "fail";
             }
-
         } catch (\Throwable $th) {
             //throw $th;
             echo "fail";
@@ -1232,17 +1263,17 @@ html;
             $respuestas = $_POST;
             $id_evaluacion = 2;
 
-            $searchRespuesta = TransmisionDao::searchRespuestas($id_evaluacion);//evaluacion manual
+            $searchRespuesta = TransmisionDao::searchRespuestas($id_evaluacion); //evaluacion manual
 
-            if($searchRespuesta['total'] == 0){
+            if ($searchRespuesta['total'] == 0) {
 
-            
+
                 foreach ($respuestas as $key => $value) {
                     $names  = $key;
-                    $name = explode("_", $names);                
+                    $name = explode("_", $names);
                     $id_pregunta = intval($name[2]); //id_pregunta
-                    $id_evaluacion = intval($name[3]);//id_evaluacion   
-                    
+                    $id_evaluacion = intval($name[3]); //id_evaluacion   
+
                     $data = new \stdClass();
 
                     $data->_pregunta_id = $id_pregunta;
@@ -1250,17 +1281,16 @@ html;
                     $data->_id_registrado = $_SESSION['id_registrado'];
 
                     // $getTotalRespuestas = TransmisionDao::getTotalRespuestasByUserAndEvaluacion($_SESSION['id_registrado'],$id_evaluacion);
-                                            
-                    $insertRespuestas = TransmisionDao::insertRespuestas($data);                              
-                    
-                }    
-            }        
 
-            $getTotalRespuestas = TransmisionDao::getTotalRespuestasByUserAndEvaluacion($_SESSION['id_registrado'],$id_evaluacion);
+                    $insertRespuestas = TransmisionDao::insertRespuestas($data);
+                }
+            }
+
+            $getTotalRespuestas = TransmisionDao::getTotalRespuestasByUserAndEvaluacion($_SESSION['id_registrado'], $id_evaluacion);
             $total_preguntas = count($getTotalRespuestas);
             $count = 0;
             foreach ($getTotalRespuestas as $key => $value) {
-                if($value['status_correcta'] == 1){
+                if ($value['status_correcta'] == 1) {
                     $count++;
                 }
             }
@@ -1269,25 +1299,24 @@ html;
             $documento = new \stdClass();
 
             $documento->_evaluacion_final = 1;
-            $documento->_calificacion_final = number_format($calificacion_final,1);
+            $documento->_calificacion_final = number_format($calificacion_final, 1);
             $documento->_id_registrado = $_SESSION['id_registrado'];
 
             $getDataUser = TransmisionDao::getDataUser($_SESSION['id_registrado']);
 
             // var_dump($getDataUser);
-            if($getDataUser['evaluacion_final'] == 0 || $getDataUser['evaluacion_final'] == "0"){
+            if ($getDataUser['evaluacion_final'] == 0 || $getDataUser['evaluacion_final'] == "0") {
                 $updateDataUser = TransmisionDao::updateDataUserCalificacionFinal($documento);
-            }else{
+            } else {
                 $updateDataUser = true;
             }
-            
 
-            if($updateDataUser){
+
+            if ($updateDataUser) {
                 echo "success";
-            }else{
+            } else {
                 echo "fail";
             }
-
         } catch (\Throwable $th) {
             //throw $th;
             echo "fail";

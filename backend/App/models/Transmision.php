@@ -43,6 +43,21 @@ sql;
         
     }
 
+    public static function getTransmisionByIds($id_video_anterior,$id_video_siguiente){
+        $mysqli = Database::getInstance(true);
+        try {
+            $query =<<<sql
+            SELECT * FROM transmision
+            WHERE id_transmision IN ($id_video_anterior,$id_video_siguiente)
+sql;
+
+        return $mysqli->queryAll($query);
+        } catch (\Throwable $th) {
+            return false;
+        }
+        
+    }
+
     public static function getTransmisionsTotalMinutes(){
         $mysqli = Database::getInstance(true);
         try {
@@ -80,7 +95,7 @@ sql;
     public static function insertProgreso($registrado,$transmision,$sala = null){
         $mysqli = Database::getInstance(1);
         $query=<<<sql
-        INSERT INTO progresos_transmision (id_transmision, sala,id_registrado, minutos, visto_ultimavez) 
+        INSERT INTO progresos_transmision (id_transmision, sala,id_registrado, minutos, fecha_hora_inicio) 
         VALUES ('$transmision','$sala','$registrado','0', NOW())
 sql;
   
@@ -223,7 +238,7 @@ sql;
     public static function updateProgreso($id_transmision, $registrado, $minutos){
         $mysqli = Database::getInstance();
         $query=<<<sql
-            UPDATE progresos_transmision SET minutos = '$minutos'
+            UPDATE progresos_transmision SET minutos = '$minutos', visto_ultimavez = NOW()
             WHERE id_transmision = '$id_transmision' AND id_registrado = '$registrado'
 sql;
         return $mysqli->update($query);

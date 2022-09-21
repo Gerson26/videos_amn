@@ -451,7 +451,7 @@ html;
             $_SESSION['id_registrado'] = $user['id_registrado'];
             $_SESSION['clave_socio'] = $user['clave_socio'];
 
-            header("location: /transmission/");
+            header("location: /transmission/video/1");
            
         // }
         

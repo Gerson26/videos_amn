@@ -152,7 +152,7 @@
         <div class="tab-content" id="v-pills-tabContent">
             <div class="tab-pane fade show position-relative active height-350 border-radius-lg" id="transmision_1" role="tabpanel" aria-labelledby="transmision_1">
                 <div class="row mt-4">
-                    <div class="col-10 col-lg-8">
+                    <div class="col-12 col-lg-8">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
@@ -219,7 +219,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-11 col-lg-4">
+                    <div class="col-12 col-lg-4">
 
                         <div class="card" style="display: none;">
                             <div class="card blur shadow-blur max-height-vh-70">
@@ -296,8 +296,9 @@
                                     <input type="hidden" name="" id="id_trasmision_1" readonly value="<?php echo $secs_t1['id_transmision']; ?>">
                                 </div>
                                 <div class="row m-auto">
-                                    <div class="col-12" id="btn-examen">
-                                        <?php echo $btn_encuesta; ?>
+                                    <div class="col-12" id="btn-next-video">
+                                        <a href="" id="btn_ante_vid" style="display: none;" class="btn btn-primary">Regresar al video anterior</a>
+                                        <a href="" id="btn_next_vid" style="display: none;" class="btn btn-primary">Ir al siguiente video</a>
                                     </div>
                                 </div>
                             </div>
@@ -528,16 +529,80 @@
 <script src="https://player.vimeo.com/api/player.js"></script>
 
 <script>
+    // //obtener el sigueinte video
+    // let id_video = $('#id_trasmision_1').val();
+    // getNextVideo(id_video);
+
+    function getNextVideo(id_video) {
+
+        let id_video_siguiente = parseInt(id_video) + 1;
+        let id_video_anterior = parseInt(id_video) - 1;
+
+
+        console.log("id del video siguinete " + id_video_siguiente);
+        console.log("este es el id del video" + id_video);
+        console.log("id video decremento" + id_video_anterior);
+
+        $.ajax({
+            url: "/Transmission/getVideo",
+            type: "POST",
+            data: {
+                id_video_anterior,
+                id_video_siguiente
+            },
+            dataType: 'json',
+            beforeSend: function() {
+                console.log("Procesando....");
+
+            },
+            success: function(respuesta) {
+
+                console.log(respuesta);
+
+                $('#btn_ante_vid').css('display', 'inline-block');
+                $('#btn_next_vid').css('display', 'inline-block');
+
+                if (respuesta.video.length == 2) {
+                    console.log("si hay  video");
+                    $('#btn_ante_vid').attr('href', '/transmission/video/' + respuesta.video[0].id_transmision);
+                    $('#btn_next_vid').attr('href', '/transmission/video/' + respuesta.video[1].id_transmision);
+
+                } else {
+                    console.log("ya no hay mas videos para mostrar");
+
+                    //boton video anterior
+                    if (id_video == 1) {
+
+                        $('#btn_ante_vid').css('display', 'none');
+                        $('#btn_next_vid').attr('href', '/transmission/video/' + respuesta.video[0].id_transmision);
+                    }
+                    //boton siguiente video
+                    if (id_video == 4) {
+                        $('#btn_next_vid').css('display', 'none');
+                        $('#btn_ante_vid').attr('href', '/transmission/video/' + respuesta.video[0].id_transmision);
+                    }
+                }
+
+            },
+            error: function(respuesta) {
+                console.log(respuesta);
+            }
+
+        });
+    }
+
+
+
     intervalo1();
-    intervalo2();
+    // intervalo2();
 
     function intervalo1() {
         intervalo = setInterval(chats, 60000, 1, 1);
     }
 
-    function intervalo2() {
-        intervalo = setInterval(chats, 60000, 2, 2);
-    }
+    // function intervalo2() {
+    //     intervalo = setInterval(chats, 60000, 2, 2);
+    // }
 
     function chats(id_tipo, sala) {
 
@@ -698,30 +763,30 @@
             });
         }
 
-        function actualizarProgresoConFecha(transmision, segundos) {
-            $.ajax({
-                url: "/Transmission/updateProgressWithDate",
-                type: "POST",
-                data: {
-                    transmision,
-                    segundos
-                },
-                beforeSend: function() {
-                    console.log("Procesando....");
-                },
-                success: function(respuesta) {
+        // function actualizarProgresoConFecha(transmision, segundos) {
+        //     $.ajax({
+        //         url: "/Transmission/updateProgressWithDate",
+        //         type: "POST",
+        //         data: {
+        //             transmision,
+        //             segundos
+        //         },
+        //         beforeSend: function() {
+        //             console.log("Procesando....");
+        //         },
+        //         success: function(respuesta) {
 
-                    console.log(respuesta);
+        //             console.log(respuesta);
 
-                },
-                error: function(respuesta) {
-                    console.log(respuesta);
-                }
-            });
-        }
+        //         },
+        //         error: function(respuesta) {
+        //             console.log(respuesta);
+        //         }
+        //     });
+        // }
 
         let status_1 = $('#status_t1').val();
-        let status_2 = $('#status_t2').val();
+        // let status_2 = $('#status_t2').val();
 
 
         // Esconder el iframe y mostrar la imagen si la transmision no está activa
@@ -742,7 +807,7 @@
         // }
 
         var intervalo;
-        var intervalo_2;
+        // var intervalo_2;
         let tiempo;
 
 
@@ -751,10 +816,10 @@
         let porcentaje_num = (inicio * 100) / parseInt(duracion);
         let increment = 1;
 
-        let inicio_2 = $('#barra_progreso_2').val();
-        let duracion_2 = $('#barra_progreso_2').attr('max');
-        let porcentaje_num_2 = (inicio_2 * 100) / parseInt(duracion_2);
-        let increment_2 = 1;
+        // let inicio_2 = $('#barra_progreso_2').val();
+        // let duracion_2 = $('#barra_progreso_2').attr('max');
+        // let porcentaje_num_2 = (inicio_2 * 100) / parseInt(duracion_2);
+        // let increment_2 = 1;
 
         let inicio_general = $('#barra_progreso_general').val();
         let duracion_general = $('#barra_progreso_general').attr('max');
@@ -770,8 +835,6 @@
         var evaluacion_final = $("#evaluacion_final").val();
         // countTime(1);
         function countTime(status) {
-            console.log(status);            
-
             if (status == 1) {
 
                 intervalo = setInterval(function() {
@@ -790,12 +853,14 @@
 
                     }
 
-                    // if (porcentaje_num >= 90 && evaluacion_final == 0) {
-                    //     $('#btn-examen').html('<button type="button" id="btn_examen_original" class="btn btn-primary" style="background-color: orangered!important;" data-bs-toggle="modal" data-bs-target="#examenOriginal">Examen</button>');
-                    // }
-
                     if (porcentaje_num_general >= 90 && evaluacion_final == 0) {
                         $('#btn-examen').html('<button type="button" id="btn_examen_original" class="btn btn-primary" style="background-color: orangered!important;" data-bs-toggle="modal" data-bs-target="#examenOriginal">Examen</button>');
+                    }
+
+                    if (porcentaje_num >= 90) {
+                        //obtener el sigueinte video
+                        let id_vid = $('#id_trasmision_1').val();
+                        getNextVideo(id_vid);
                     }
 
                     $('#barra_progreso_1').val(inicio);
@@ -808,10 +873,20 @@
                     $('#porcentaje_general').html(porcentaje_num_general.toFixed(0) + ' %');
 
                 }, 1000);
-            }else{
+            } else {
                 clearInterval(intervalo);
             }
 
+        }
+
+        if (porcentaje_num_general >= 90 && evaluacion_final == 0) {
+            $('#btn-examen').html('<button type="button" id="btn_examen_original" class="btn btn-primary" style="background-color: orangered!important;" data-bs-toggle="modal" data-bs-target="#examenOriginal">Examen</button>');
+        }
+
+        if (porcentaje_num >= 90) {
+            //obtener el sigueinte video
+            let id_vid = $('#id_trasmision_1').val();
+            getNextVideo(id_vid);
         }
 
         if ($("#datos").val() == 0) {
@@ -828,9 +903,12 @@
                 window.location.replace("/account/");
             });
         } else {
-            var evaluacion_inicial = $("#evaluacion_inicial").val();
-
-            verificarExamenDiagnostico(evaluacion_inicial);
+            //solo se activa en el segundo video
+            if($("#id_trasmision_1").val() == 2){
+                var evaluacion_inicial = $("#evaluacion_inicial").val();
+                verificarExamenDiagnostico(evaluacion_inicial);
+            }
+            
         }
 
         function verificarExamenDiagnostico(status_examen) {
@@ -958,48 +1036,48 @@
 
 
 
-        function countTime2() {
-            intervalo_2 = setInterval(function() {
-                tiempo_total_2++;
+        // function countTime2() {
+        //     intervalo_2 = setInterval(function() {
+        //         tiempo_total_2++;
 
 
-                if (inicio_2 < duracion_2) {
-                    inicio_2 += increment_2;
+        //         if (inicio_2 < duracion_2) {
+        //             inicio_2 += increment_2;
 
-                }
+        //         }
 
-                if (tiempo_total_2 % 60 == 0) {
-                    console.log('Ejecutamos Ajax');
+        //         if (tiempo_total_2 % 60 == 0) {
+        //             console.log('Ejecutamos Ajax');
 
-                    actualizarProgreso($('#id_trasmision_2').val(), (inicio_2 / 60));
+        //             actualizarProgreso($('#id_trasmision_2').val(), (inicio_2 / 60));
 
-                }
+        //         }
 
-                // if (porcentaje_num >= 79) {
-                //     $('#btn-examen').html('<button type="button" class="btn btn-primary" style="background-color: orangered!important;" data-toggle="modal" data-target="#encuesta">Examen</button>');
-                // }
+        //         // if (porcentaje_num >= 79) {
+        //         //     $('#btn-examen').html('<button type="button" class="btn btn-primary" style="background-color: orangered!important;" data-toggle="modal" data-target="#encuesta">Examen</button>');
+        //         // }
 
-                $('#barra_progreso_2').val(inicio_2);
-                porcentaje_num_2 = (inicio_2 * 100) / parseInt(duracion_2);
-                $('#porcentaje_2').html(porcentaje_num_2.toFixed(0) + ' %');
-
-
-            }, 1000);
+        //         $('#barra_progreso_2').val(inicio_2);
+        //         porcentaje_num_2 = (inicio_2 * 100) / parseInt(duracion_2);
+        //         $('#porcentaje_2').html(porcentaje_num_2.toFixed(0) + ' %');
 
 
-        }
+        //     }, 1000);
+
+
+        // }
 
 
 
-        let identificadorIntervaloDeTiempo;
+        // let identificadorIntervaloDeTiempo;
 
-        function repetirCadaSegundo() {
-            identificadorIntervaloDeTiempo = setInterval(mandarMensaje, 1000);
-        }
+        // function repetirCadaSegundo() {
+        //     identificadorIntervaloDeTiempo = setInterval(mandarMensaje, 1000);
+        // }
 
-        function mandarMensaje() {
-            console.log("Ha pasado 1 segundo.");
-        }
+        // function mandarMensaje() {
+        //     console.log("Ha pasado 1 segundo.");
+        // }
 
         var iframe = document.querySelector('iframe');
         var player = new Vimeo.Player(iframe);
@@ -1012,15 +1090,15 @@
             play = 0;
         });
 
-        
+
         player.on('play', function() {
             console.log('played the video!');
-            
-            if(play == 0){
+
+            if (play == 0) {
                 play = 1;
                 countTime(1);
-                
-            }else{
+
+            } else {
                 console.log("ya está en play");
             }
         });
